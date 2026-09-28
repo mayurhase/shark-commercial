@@ -188,20 +188,22 @@ red {
 }
 
 #home1 > h1 {
-	font-size: 90px;
-	width: 600px;
+	font-size: clamp(68px, 5.5vw, 104px);
+	width: min(90vw, 750px);
 	font-weight: 600;
 	text-align: center;
-	line-height: 1.25;
+	line-height: 1.2;
 	color: var(--light);
 }
 
 #home1 > p {
 	font-weight: 400;
 	color: rgba(var(--light-rgb), 0.5);
-	font-size: 30px;
-	width: 400px;
+	font-size: clamp(16px, 1.8vw, 24px);
+	width: min(85vw, 550px);
 	text-align: center;
+	line-height: 1.5;
+	margin-top: 2rem;
 }
 
 #home1 > marquee {
@@ -2638,7 +2640,7 @@ input:-webkit-autofill:active {
 	}
 
 	#home1 > marquee {
-		font-size: 17;
+		font-size: 16px;
 		width: 70%;
 	}
 
@@ -2679,15 +2681,31 @@ input:-webkit-autofill:active {
 		display: none;
 	}
 
+	#home1 {
+		width: 100%;
+		max-width: 100vw;
+		padding: 0 16px;
+		box-sizing: border-box;
+	}
+
 	#home1 > h1 {
-		font-size: 50px;
-		font-size: 14vw;
-		width: 80vw;
+		font-size: clamp(38px, 12.5vw, 52px);
+		font-weight: 700;
+		width: 100%;
+		max-width: 95vw;
+		line-height: 1.08;
+		margin: 0 auto;
+		letter-spacing: 0.5px;
+		word-break: normal;
+		overflow-wrap: break-word;
 	}
 
 	#home1 > p {
-		font-size: 5vw;
-		width: 60vw;
+		font-size: clamp(17px, 4.8vw, 22px);
+		width: 100%;
+		max-width: 90vw;
+		line-height: 1.4;
+		margin: 1.5rem auto 0;
 	}
 
 	.arrow {
