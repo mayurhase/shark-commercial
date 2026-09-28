@@ -97,10 +97,13 @@ body {
 }
 
 #logo {
-	height: 50px;
+	height:auto;
 	position: fixed;
-	top: 25px;
-	left: 25px;
+	top: 1px;
+	left: 10px;
+	width: 125px;
+	z-index: 1000;
+	display: block;
 }
 
 #menu-icon {
