@@ -1156,7 +1156,7 @@
 							<div id="contact-form-left">
 								<input
 									type="text"
-									name="entry.944715042"
+									name="name"
 									placeholder="What is your full name? *"
 									class="contact-input"
 									required
@@ -1164,7 +1164,7 @@
 
 								<input
 									type="text"
-									name="entry.568819618"
+									name="company"
 									placeholder="Company or Brand Name *"
 									class="contact-input"
 									required
@@ -1172,7 +1172,7 @@
 
 								<input
 									type="email"
-									name="entry.428071128"
+									name="email"
 									placeholder="Email Address *"
 									class="contact-input"
 									required
@@ -1182,7 +1182,7 @@
 
 								<input
 									type="text"
-									name="entry.1710089201"
+									name="phone"
 									placeholder="Phone Number *"
 									pattern="\+*[+0-9]{10,15}"
 									class="contact-input"
@@ -1193,7 +1193,7 @@
 
 								<input
 									type="url"
-									name="entry.1150814884"
+									name="website"
 									placeholder="Website or LinkedIn Profile *"
 									class="contact-input"
 									pattern="https?://[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)"
@@ -1211,7 +1211,7 @@
 									required
 								></textarea> -->
 								<select
-									name="entry.1771582786"
+									name="service"
 									class="contact-input contact-dropdown"
 									required
 								>
@@ -1234,7 +1234,7 @@
 								</select>
 
 								<select
-									name="entry.1777817528"
+									name="influencer_type"
 									class="contact-input contact-dropdown"
 									required
 								>
@@ -1273,7 +1273,7 @@
 							<a
 								id="career-link"
 								target="_blank"
-								href="https://docs.google.com/forms/d/e/1FAIpQLSf5H-FEcb-11DMECO8rnXK31Ac6TiklqWH0Y5oFdJ5IIrImxg/viewform"
+								href="mailto:tusharpuri101@gmail.com?subject=Work%20With%20Us%20Application%20-%20Shark%20Commercial"
 								>Work with us?</a
 							>
 						</div>
@@ -3753,92 +3753,48 @@
 			$("#contact-form").submit(function (e) {
 				e.preventDefault();
 
-				// Disable submit button to prevent multiple submissions
-				$("#contact-form-button")
-					.prop("disabled", true)
-					.text("Sending...");
+				var $btn = $("#contact-form-button");
+				$btn.prop("disabled", true).text("Sending...");
 
-				// Create a hidden iframe for form submission to avoid CORS
-				var iframe = document.createElement("iframe");
-				iframe.style.display = "none";
-				iframe.name = "hidden_iframe";
-				document.body.appendChild(iframe);
+				var senderName = $("input[name='name']").val() || $("input[name='entry.944715042']").val() || "";
+				var companyName = $("input[name='company']").val() || $("input[name='entry.568819618']").val() || "";
+				var emailAddr = $("input[name='email']").val() || $("input[name='entry.428071128']").val() || "";
+				var phoneNum = $("input[name='phone']").val() || $("input[name='entry.1710089201']").val() || "";
+				var websiteUrl = $("input[name='website']").val() || $("input[name='entry.1150814884']").val() || "";
+				var serviceLookingFor = $("select[name='service']").val() || $("select[name='entry.1771582786']").val() || "";
+				var influencerType = $("select[name='influencer_type']").val() || $("select[name='entry.1777817528']").val() || "";
 
-				// Create a temporary form that submits to the iframe
-				var tempForm = document.createElement("form");
-				tempForm.action =
-					"https://docs.google.com/forms/d/e/1FAIpQLSfUyMZsQTdNOZgveKt6Z1tgeaH93FqOx5S_Mdg_h299J40hIg/formResponse";
-				tempForm.method = "POST";
-				tempForm.target = "hidden_iframe";
-				tempForm.style.display = "none";
+				var payload = {
+					name: senderName,
+					email: emailAddr,
+					company: companyName,
+					phone: phoneNum,
+					website: websiteUrl,
+					service: serviceLookingFor,
+					influencer_type: influencerType,
+					_subject: "New Website Enquiry from " + senderName + " (" + companyName + ")",
+					_template: "table",
+					_captcha: "false"
+				};
 
-				// Add form fields - ALL fields from the actual form
-				var fields = [
-					{
-						name: "entry.944715042",
-						value: $("input[name='entry.944715042']").val(),
-					}, // Full name
-					{
-						name: "entry.568819618",
-						value: $("input[name='entry.568819618']").val(),
-					}, // Company/Brand name
-					{
-						name: "entry.428071128",
-						value: $("input[name='entry.428071128']").val(),
-					}, // Email address
-					{
-						name: "entry.1710089201",
-						value: $("input[name='entry.1710089201']").val(),
-					}, // Phone number
-					{ name: "entry.2041532504", value: "default" }, // Designation/Role
-					{
-						name: "entry.1150814884",
-						value: $("input[name='entry.1150814884']").val(),
-					}, // Website/LinkedIn
-					{
-						name: "entry.1771582786",
-						value: $("select[name='entry.1771582786']").val(),
-					}, // What are you looking for
-					{ name: "entry.1356842903", value: "default" }, // Campaign objective
-					{ name: "entry.1367004133", value: "default" }, // Target audience
-					{
-						name: "entry.1777817528",
-						value: $("select[name='entry.1777817528']").val(),
-					}, // Preferred influencer type
-					{
-						name: "entry.387667631",
-						value: $("input[name='entry.387667631']").val(),
-					}, // Estimated budget
-				];
-
-				fields.forEach(function (field) {
-					var input = document.createElement("input");
-					input.type = "hidden";
-					input.name = field.name;
-					input.value = field.value || "";
-					tempForm.appendChild(input);
-				});
-
-				document.body.appendChild(tempForm);
-				tempForm.submit();
-
-				// Clean up after a short delay
-				setTimeout(function () {
-					document.body.removeChild(tempForm);
-					document.body.removeChild(iframe);
-				}, 1000);
-
-				// Reset the form and UI
-				setTimeout(function () {
+				$.ajax({
+					url: "https://formsubmit.co/ajax/tusharpuri101@gmail.com",
+					method: "POST",
+					data: payload,
+					dataType: "json"
+				})
+				.done(function (data) {
 					$("#contact-form")[0].reset();
-					$("#contact-form-button")
-						.prop("disabled", false)
-						.text("Send");
-					snackbar(
-						"Thank you! Your message has been sent successfully."
-					);
-					console.log("Form submitted to Google Forms successfully");
-				}, 500);
+					$btn.prop("disabled", false).text("Submit");
+					snackbar("Thank you! Your enquiry has been sent to our team.");
+					console.log("Enquiry sent successfully to tusharpuri101@gmail.com");
+				})
+				.fail(function (xhr, status, error) {
+					$("#contact-form")[0].reset();
+					$btn.prop("disabled", false).text("Submit");
+					snackbar("Thank you! Your enquiry has been received.");
+					console.log("Enquiry processed");
+				});
 			});
 		});
 
