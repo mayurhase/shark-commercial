@@ -1,13 +1,7 @@
 var servicesData,
 	brandsData,
-	creatorsData,
-	moreCreatorsData = [],
 	aboutData,
 	configData,
-	creatorPages = [],
-	creatorPageIndex = 0,
-	moreCreatorPages = [],
-	moreCreatorPageIndex = 0,
 	caseStudiesData,
 	loadedImages = 0,
 	preloadImageArray = [];
@@ -76,80 +70,6 @@ $(document).ready(function () {
 		})
 	);
 
-	// promises.push(
-	// 	$.get("data/exclusive-creators.csv", "text", function (data) {
-	// 		creatorsData = $.csv.toObjects(data);
-	// 		for (let i = 0; i < creatorsData.length; i++) {
-	// 			let page = Math.ceil((i + 1) / 10) - 1;
-	// 			if (creatorPages[page] == undefined) creatorPages[page] = [];
-	// 			creatorPages[page].push(creatorsData[i]);
-	// 		}
-	// 		if (creatorsData.length > 10) {
-	// 			creatorsData.slice(0, 10).map((creator, index) => {
-	// 				addCreatorsData(creator.name, index, true);
-	// 			});
-	// 		} else {
-	// 			creatorsData.map((creator, index) => {
-	// 				addCreatorsData(creator.name, index, true);
-	// 			});
-	// 		}
-	// 		creatorBoxInit();
-	// 	})
-	// );
-
-	// promises.push(
-	// 	$.get("data/more-creators.csv", "text", function (data) {
-	// 		moreCreatorsData = $.csv.toObjects(data);
-	// 		for (let i = 0; i < moreCreatorsData.length; i++) {
-	// 			let page = Math.ceil((i + 1) / 10) - 1;
-	// 			if (moreCreatorPages[page] == undefined)
-	// 				moreCreatorPages[page] = [];
-	// 			moreCreatorPages[page].push(moreCreatorsData[i]);
-	// 		}
-	// 		if (moreCreatorsData.length > 10) {
-	// 			moreCreatorsData.slice(0, 10).map((creator, index) => {
-	// 				addMoreCreatorsData(
-	// 					creator.name,
-	// 					creator.image,
-	// 					index,
-	// 					true
-	// 				);
-	// 			});
-	// 		} else {
-	// 			moreCreatorsData.map((creator, index) => {
-	// 				addMoreCreatorsData(
-	// 					creator.name,
-	// 					creator.image,
-	// 					index,
-	// 					true
-	// 				);
-	// 			});
-	// 		}
-	// 		moreCreatorBoxInit();
-	// 	})
-	// );
-
-	promises.push(
-		$.get("data/creators.csv", "text", function (data) {
-			creatorsData = $.csv.toObjects(data);
-			for (let i = 0; i < creatorsData.length; i++) {
-				let page = Math.ceil((i + 1) / 10) - 1;
-				if (creatorPages[page] == undefined) creatorPages[page] = [];
-				creatorPages[page].push(creatorsData[i]);
-			}
-			if (creatorsData.length > 10) {
-				creatorsData.slice(0, 10).map((creator, index) => {
-					addCreatorsData(creator.name, creator.image, index, true);
-				});
-			} else {
-				creatorsData.map((creator, index) => {
-					addCreatorsData(creator.name, creator.image, index, true);
-				});
-			}
-			creatorBoxInit();
-		})
-	);
-
 	promises.push(
 		$.get("data/about.csv", "text", function (data) {
 			aboutData = $.csv.toObjects(data);
@@ -158,40 +78,6 @@ $(document).ready(function () {
 			});
 		})
 	);
-
-	// let moreCreatorImagesFolder = "assets/images/more-creators";
-	// let moreCreatorIndex = 0;
-
-	// $.ajax({
-	// 	url: moreCreatorImagesFolder,
-	// 	success: function (data) {
-	// 		$(data)
-	// 			.find("a")
-	// 			.attr("href", function (i, val) {
-	// 				if (val.match(/\.(jpe?g|png|gif|webp)$/)) {
-	// 					moreCreatorsData.push(decodeURI(val));
-	// 					// addMoreCreatorsData(decodeURI(val), moreCreatorIndex);
-	// 					// moreCreatorIndex++;
-	// 				}
-	// 			});
-	// 		for (let i = 0; i < moreCreatorsData.length; i++) {
-	// 			let page = Math.ceil((i + 1) / 10) - 1;
-	// 			if (moreCreatorPages[page] == undefined)
-	// 				moreCreatorPages[page] = [];
-	// 			moreCreatorPages[page].push(moreCreatorsData[i]);
-	// 		}
-	// 		if (moreCreatorsData.length > 10) {
-	// 			moreCreatorsData.slice(0, 10).map((creatorImage, index) => {
-	// 				addMoreCreatorsData(creatorImage, index, true);
-	// 			});
-	// 		} else {
-	// 			moreCreatorsData.map((creatorImage, index) => {
-	// 				addMoreCreatorsData(creatorImage, index, true);
-	// 			});
-	// 		}
-	// 		moreCreatorBoxInit();
-	// 	},
-	// });
 
 	Promise.all(promises).then((values) => {
 		preloadImages();
@@ -219,43 +105,6 @@ function addBrandsData(name, visible, index) {
 				<img src="assets/images//brands-new/colored/${name.toLowerCase()}.png" alt="${name}" />
 			</div>
 	`);
-}
-
-function addMoreCreatorsData(name, image, index, initial = false) {
-	$("#creators-container-2").append(`
-		<div class="creator-box-2 hover-pointer-all" index="${index}" ${
-		initial ? "" : `style="height:0px;"`
-	}>
-			<img
-				src="assets/images/more-creators/${image}"
-				alt="${name}"
-				class="creator-img-2"
-			/>
-			<div class="creator-name-2">${name}</div>
-		</div>
-	`);
-}
-
-function addCreatorsData(name, image, index, initial = false) {
-	let imgPath;
-	if (image && image.trim() !== "") {
-		// If an image name is provided, assume it's in the 'creators' folder
-		imgPath = "creators/" + image;
-	} else {
-		// Fallback to compressed if no image name is provided
-		imgPath = "creators/compressed/" + name.toLowerCase() + ".jpg";
-	}
-	   $("#creators-container").append(`
-		   <div class="creator-box pointer-events-all" index="${index}" ${
-		   initial ? "" : `style="height:0px;"`
-	   }>
-			   <img
-				   src="assets/images/${imgPath}"
-				   alt="Creator image"
-				   class="creator-img"
-			   />
-		   </div>
-	   `);
 }
 
 function addAboutData(title, detail) {
